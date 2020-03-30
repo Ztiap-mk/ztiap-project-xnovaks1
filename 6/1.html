@@ -18,20 +18,25 @@
 
         <div class="game">
             <canvas id="canvas" height="420" width="280"></canvas>
-            <img class="plosina" src="plosina.png" />
+            <img class="autoPolisna" src="plosina.png" />
             <img class="block01" src="blockOranzovy.png" />
             <img class="block02" src="blockOranzovy.png" />
             <img class="block03" src="blockOranzovy.png" />
         </div>
 
-        <img src="lopta.png" id="lopta" width="25" height="25">
+
             
 
-        <div class="controls">
-            <button id="button">Step</button>
+        <div class="allControls">
+          <button id="button">Step</button>
 
+          <div class="controls">
+            <button onclick="stop()" />Auto plosina STOP</button>
+            <button onclick="play()" />Auto plosina START</button>
+          </div>
 
         </div>
+
 
         <p id="text">
           Tick: 0

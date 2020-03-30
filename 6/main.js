@@ -79,3 +79,14 @@
               
             }
 
+            function stop() {
+                document.querySelector(".autoPolisna").style.animationPlayState = "paused";
+  
+                const initialWidth = document.body.clientWidth;
+                pos = document.querySelector(".").offsetLeft;
+                val = Math.round((pos * 100)/initialWidth);
+          }
+  
+          function play() {
+            document.querySelector(".autoPolisna").style.animationPlayState = "running";
+          }

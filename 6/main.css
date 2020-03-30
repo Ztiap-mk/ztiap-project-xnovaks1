@@ -8,16 +8,6 @@
           }
 
 
-          .plosina
-          {
-              width: 140px;
-              height: 17px;
-              position:absolute;
-              left:100px;
-              top:440px;
-          }
-
-
 
           .block01
           {
@@ -52,7 +42,31 @@
 
 
 
-        .controls{
+          .autoPolisna{
+            width: 5px;
+            height: 15px;
+            position: relative;
+            width: 20vw;
+            animation-name: move;
+            animation-duration: 1s;
+            animation-delay: 0s;
+            animation-direction: alternate-reverse;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            position:absolute;
+            left:0x;
+            top:440px;
+            width:auto;
+          }
+
+
+          @keyframes move {
+            from {left: 15px;}
+            to {left: 145px;}
+          }
+
+
+        .allControls{
           margin: 15px;
         }
 

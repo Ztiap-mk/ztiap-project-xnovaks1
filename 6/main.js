@@ -3,12 +3,13 @@
     var ctx;
     var tick = 0;
     var img = new Image();
-
-
+    var myMusic;
+    var zvukKolizia;
+    
         var dot = 
         {
-            x: 50,
-            y: 50,
+            x: 70,
+            y: 76,
             dx: 10,
             dy: 4,
 
@@ -16,15 +17,33 @@
             move: function() 
             {
 
-                if (this.x >= canvas.width || this.x <= 0){
+                if (this.x >= canvas.width - 10 || this.x <= 10){
                   this.dx *= -1;
+                 
                 }
 
-                if (this.y >= canvas.height || this.y <= 0){
+                if ( this.y <= 75){
+                  this.dy *= -1;
+                 
+                }
+
+                if (this.y >= canvas.height - 15)
+                {
+                  this.dy *= 0;    
+                  this.dx *= 0;    
+                  cancelAnimationFrame(id);
+                  
+                  fungujIbarzTyKokos = 0;
+                  gameOver();
+                  document.addEventListener('click', stlacenyStart, false);
+
+                }
+                if (this.y >= canvas.height - 30)
+                {
                   this.dy *= -1;
                 }
 
- 
+
                 this.x = this.x + this.dx;
                 this.y = this.y + this.dy;
             }
@@ -50,6 +69,25 @@
           }
 
 
+      function gameOver()
+      {
+        img.src = "pozadieGO.png";
+            img.onload = function () {
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              }
+      }
+          
+
+
+      function hlavnyMenu()
+      {
+        img.src = "pozadieMenu.png";
+            img.onload = function () {
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              }
+      }
+
+
       function pozadie() {
             img.src = "pozadie.jpg";
             img.onload = function () {
@@ -64,14 +102,49 @@
       }
 
 
-        function step() {
+
+    
+      var misX = 0;
+      var misY = 0;
+      var fungujIbarzTyKokos = 0;
+
+
+ 
+
+
+
+      function stlacenyStart(e)
+      {   misX = e.pageX - canvas.offsetLeft;
+          misY = e.pageY - canvas.offsetTop;
+
+
+          if( fungujIbarzTyKokos == 0 && misX >= 60 && misX <= 220 && misY >= 140 && misY <= 200)
+           {
+            spustHru();
+            fungujIbarzTyKokos = 1;
+           } 
+
+      }
+
+
+
+
+
+
+        function step() 
+        {  
               tick++;
               dot.move();
               drawDot();
               setText();
-              pozadie();  // tiez v pozadi mam vykreslenie blkov ktore sa pohibuju kliknutim
-              requestAnimationFrame(step);
-         
+              
+                            // plosina
+                            ptlosinaTlacidla.move();
+                            ptlosinaTlacidla.draw();
+              pozadie();
+              //requestAnimationFrame(step);
+              var id = requestAnimationFrame(step);
+             
         }
 
 
@@ -97,7 +170,7 @@
           var mouse = { x: 0, y: 0, pressed: false, selected: false}
           var scene = []
           var poradieBlokuStlpec = 0;
-          var poradieBlokuRiadok = 20;
+          var poradieBlokuRiadok = 35;
 
           function Window() {
             // konstrukcia pohibujucich blokov
@@ -126,6 +199,56 @@
 
 
 
+
+          var keys = {};                      // PLOSINA
+
+          var ptlosinaTlacidla = {
+            x: 100,
+            y: 370
+          };
+          
+          // 
+          ptlosinaTlacidla.draw = function() {
+            this.image =new Image();                    
+            this.image.src = "plosina.png";
+            ctx.drawImage(this.image,ptlosinaTlacidla.x,ptlosinaTlacidla.y, 130, 15);
+            ctx.closePath();
+            ctx.fill();
+          };
+
+          ptlosinaTlacidla.move = function() 
+          {
+            if(ptlosinaTlacidla.x <= 5)         // stop na lavej strane
+            { 
+              if (keys[39]) ptlosinaTlacidla.x += 5;
+
+            }
+            else
+              {
+                  if(ptlosinaTlacidla.x >= 145)   // stop na pravej strane
+                  {
+                      if (keys[37]) ptlosinaTlacidla.x -= 5;
+                  }
+                  else
+                  {
+                    if (keys[39]) ptlosinaTlacidla.x += 5;
+                    if (keys[37]) ptlosinaTlacidla.x -= 5;
+                  }
+              }
+
+
+          };
+
+          // Handle keyboard events
+          window.onkeydown = function(event) {
+            keys[event.keyCode] = true;
+            console.log(keys);
+          };
+          window.onkeyup = function(event) {
+            keys[event.keyCode] = false;
+          };
+
+
           // Handle mouse movement
           function mousemove(event) {
               mouse.x = event.pageX - canvas.offsetLeft
@@ -140,6 +263,45 @@
             mouse.selected = false
           }
 
+
+
+            // spustenie hry
+          function spustHru()
+          {
+                step();
+                // pre cv 7
+
+                canvas.onmousedown = mousedown;
+                canvas.onmouseup = mouseup;
+                canvas.onmousemove = mousemove;
+
+                // ctx = canvas.getContext("2d")
+                
+
+                                                //  DOLEZITE ! povec kolko bloky chces do kolkoBlokyChcem 
+                                              kolkoBlokyChcem = 6;
+
+                for(i=0; i<kolkoBlokyChcem; i++)
+                {
+                  if(i%3 == 0)
+                    {             
+                      poradieBlokuStlpec = 0;
+                      poradieBlokuRiadok += 50;
+                      
+                      
+                    }
+                
+                      scene.push(new Window())
+                      poradieBlokuStlpec+= 90; 
+                }
+          }
+
+
+
+
+          
+
+
           var kolkoBlokyChcem, i , j;
           
         window.onload = function()
@@ -148,41 +310,13 @@
               text = document.getElementById("text");
               canvas = document.getElementById("canvas");
               ctx = canvas.getContext("2d");
-              step();
-              // pre cv 7
 
-              canvas.onmousedown = mousedown
-              canvas.onmouseup = mouseup
-              canvas.onmousemove = mousemove
+             
 
-              // ctx = canvas.getContext("2d")
+              hlavnyMenu();
+
+              document.addEventListener('click', stlacenyStart, false);
               
-
-                                              //  DOLEZITE ! povec kolko bloky chces do kolkoBlokyChcem 
-                                            kolkoBlokyChcem = 6;
-
-              for(i=0; i<kolkoBlokyChcem; i++)
-              {
-                if(i%3 == 0)
-                  {             
-                    poradieBlokuStlpec = 0;
-                    poradieBlokuRiadok += 50;
-                    
-                    
-                  }
-              
-                    scene.push(new Window())
-                    poradieBlokuStlpec+= 90;
-                  
-              }
-
-
-
-
-              // ak budem mat viac ako 3 (dalsi riadok) zvacim aj poradieBlokuRiadok
-
-
-
               
             }
 

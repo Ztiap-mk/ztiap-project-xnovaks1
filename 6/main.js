@@ -29,8 +29,8 @@
 
                 if (this.y >= canvas.height - 15)
                 {
-                  this.dy *= 0;    
-                  this.dx *= 0;    
+                  // this.dy *= 0;    
+                  // this.dx *= 0;    
                   cancelAnimationFrame(id);
                   
                   fungujIbarzTyKokos = 0;
@@ -42,7 +42,7 @@
                 {
                   this.dy *= -1;
                 }
-
+                
 
                 this.x = this.x + this.dx;
                 this.y = this.y + this.dy;
@@ -179,7 +179,14 @@
             this.width = 64;
             this.height = 28;
             this.image =new Image();
-            this.image.src = "blockFialovy.png";
+            if(farbaBlok == 1)
+                this.image.src = "blockFialovy.png";
+
+            if(farbaBlok == 2)
+                this.image.src = "blockOranzovy.png";
+
+            if(farbaBlok > 2)
+                this.image.src = "blockZeleny.png";
 
           }
           
@@ -264,6 +271,29 @@
           }
 
 
+var farbaBlok = 0;
+
+
+function vykresliBloke()
+{
+   //  DOLEZITE ! povec kolko bloky chces do kolkoBlokyChcem 
+   kolkoBlokyChcem = 9;
+
+   for(i=0; i<kolkoBlokyChcem; i++)
+   {
+        if(i%3 == 0)
+        {             
+            poradieBlokuStlpec = 0;
+            poradieBlokuRiadok += 50;
+            farbaBlok ++;                                 
+        }
+                                        
+        scene.push(new Window())
+        poradieBlokuStlpec+= 90; 
+  }
+}
+
+
 
             // spustenie hry
           function spustHru()
@@ -275,31 +305,13 @@
                 canvas.onmouseup = mouseup;
                 canvas.onmousemove = mousemove;
 
-                // ctx = canvas.getContext("2d")
+                vykresliBloke();
                 
 
-                                                //  DOLEZITE ! povec kolko bloky chces do kolkoBlokyChcem 
-                                              kolkoBlokyChcem = 6;
-
-                for(i=0; i<kolkoBlokyChcem; i++)
-                {
-                  if(i%3 == 0)
-                    {             
-                      poradieBlokuStlpec = 0;
-                      poradieBlokuRiadok += 50;
-                      
-                      
-                    }
-                
-                      scene.push(new Window())
-                      poradieBlokuStlpec+= 90; 
-                }
+               
           }
 
 
-
-
-          
 
 
           var kolkoBlokyChcem, i , j;
@@ -314,7 +326,6 @@
              
 
               hlavnyMenu();
-
               document.addEventListener('click', stlacenyStart, false);
               
               
